@@ -1,0 +1,30 @@
+﻿{
+  "name": "One",
+  "version": "1.0.0",
+  "manifest_version": 2,
+  "icons": {
+    "16": "logo_16.png",
+    "48": "logo_48.png",
+    "128": "logo_128.png"
+  },
+  "permissions": [
+    "bookmarks","tabs","http://*/*","https://*/*"
+  ],
+  "browser_action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "scripts": [
+      "background.js"
+    ]
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*","https://*/*"],
+      "js": [
+        "foreground.js"
+      ]
+    }
+  ],
+  "content_security_policy":"script-src 'self' https://cdn.rawgit.com; object-src 'self'"
+}  
