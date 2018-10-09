@@ -1,28 +1,16 @@
 let tab, bookmarks, isUrl, depth, bg = chrome.extension.getBackgroundPage();
 
+chrome.tabs.getSelected(null, function (selected) {
+    tab = selected;
+});
+
 document.addEventListener('DOMContentLoaded', getBookmarks);
 
 window.onload = function () {
-    chrome.tabs.getSelected(null, function (selected) {
-        tab = selected;
-    });
-    document.getElementById('menu-save').onclick = function() {
-        let file = new File([bookmarks], 'bookmarks.md', {type: 'text/markdown;charset=utf-8'});
-        saveAs(file);
-    }
-    document.getElementById('menu-bookmark').onclick = function () {
-        let pre = document.getElementsByTagName('pre');
-        if (pre.length == 0){
-            setHomeMenu();
-            let child = document.createElement('pre');
-            child.innerHTML = '<pre>' + bookmarks + '</pre>';
-            (document.getElementsByTagName('body')[0]).appendChild(child);
-        }
-    }
     document.getElementById('menu-qrcode').onclick = function() {
         let img = document.getElementById('qrcode');
         if (img == null) {
-            setHomeMenu();
+            addCloseIcon();
             img = document.createElement('div');
             img.setAttribute('id', 'qrcode');
             document.getElementById('menu').insertAdjacentElement('afterend', img);
@@ -33,9 +21,13 @@ window.onload = function () {
             qrcode.makeCode(tab.url);    
         }
     }
+    document.getElementById('menu-bookmark').onclick = function() {
+        let file = new File([bookmarks], 'bookmarks.md', {type: 'text/markdown;charset=utf-8'});
+        saveAs(file);
+    }
 }
 
-function setHomeMenu() {
+function addCloseIcon() {
     document.getElementById('menu').innerHTML = '<div id="menu-close"><i class="fas fa-times-circle"></i></div>';
     document.getElementById('menu-close').onclick = function() {
         location.reload();
