@@ -25,6 +25,16 @@ window.onload = function () {
         let file = new File([bookmarks], 'bookmarks.md', {type: 'text/markdown;charset=utf-8'});
         saveAs(file);
     }
+    document.getElementById('menu-ufo').onclick = function() {
+        chrome.tabs.sendMessage(tab.id, {command: 'ufo'}, function (response) {
+            if (response && response.length) {
+                let file = new File([response], 'ip.md', {type: 'text/markdown;charset=utf-8'});
+                saveAs(file);
+            } else {
+                alert('no ufo vps');
+            }
+        })
+    }
 }
 
 function addCloseIcon() {
