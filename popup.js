@@ -31,7 +31,22 @@ window.onload = function () {
                 let file = new File([response], 'ip.md', {type: 'text/markdown;charset=utf-8'});
                 saveAs(file);
             } else {
-                alert('no ufo vps');
+                chrome.notifications.getPermissionLevel(function(level){
+                    if(level == 'granted'){
+                        chrome.notifications.create(
+                            "ufo_vps_notification",
+                            {
+                                type: "basic",
+                                iconUrl: "logo_48.png",
+                                title: "Not found:",
+                                message: "There is no ufo vps on this page: " + tab.url
+                            }, 
+                            chrome.notifications.clear
+                        );
+                    }else{
+                        alert('no ufo vps')
+                    }
+                });
             }
         })
     }
