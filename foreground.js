@@ -5,10 +5,11 @@ chrome.extension.onMessage.addListener(
         console.log(data);
         switch (data.command) {
             case 'ufo':
+                let rule = /\d+\.\d+\.\d+\.\d+/;
                 let ip = '';
-                $('td').each(function (i, o) {
-                    let rule = /\d+\.\d+\.\d+\.\d+/;
+                document.querySelectorAll('td').forEach(function (o, i) {
                     if (rule.test(o.innerHTML)) {
+                        console.log(i, o.innerHTML)
                         ip += o.innerHTML.match(rule)[0];
                         ip += '\n';
                     }
