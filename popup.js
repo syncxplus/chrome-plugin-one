@@ -4,9 +4,9 @@ chrome.tabs.getSelected(null, function (selected) {
     tab = selected;
 });
 
-document.addEventListener('DOMContentLoaded', getBookmarks);
+document.addEventListener('DOMContentLoaded', function () {
+    getBookmarks();
 
-window.onload = function () {
     document.getElementById('menu-qrcode').onclick = function() {
         let img = document.getElementById('qrcode');
         if (img == null) {
@@ -18,13 +18,40 @@ window.onload = function () {
                 width: 200,
                 height: 200
             });
-            qrcode.makeCode(tab.url);    
+            qrcode.makeCode(tab.url);
         }
-    }
+    };
+
     document.getElementById('menu-bookmark').onclick = function() {
-        let file = new File([bookmarks], 'bookmarks.md', {type: 'text/markdown;charset=utf-8'});
-        saveAs(file);
-    }
+        let data = {
+            api: '',
+            api_key: '',
+            api_token: '',
+            page_title: 'Bookmarks',
+            page_content: bookmarks
+        };
+        fetch(data.api, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: Object.keys(data)
+                .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(data[k]))
+                .join('&'),
+        })
+            .then(function () {
+                alert('Upload bookmarks done');
+            })
+            .catch(function () {
+                for (let i = 0; i < arguments.length; i++) {
+                    console.log(arguments[i]);
+                }
+                alert('Upload bookmarks error');
+            });
+        //let file = new File([bookmarks], 'bookmarks.md', {type: 'text/markdown;charset=utf-8'});
+        //saveAs(file);
+    };
+
     document.getElementById('menu-ufo').onclick = function() {
         chrome.tabs.sendMessage(tab.id, {command: 'ufo'}, function (response) {
             if (response && response.length) {
@@ -34,13 +61,13 @@ window.onload = function () {
                 chrome.notifications.getPermissionLevel(function(level){
                     if(level == 'granted'){
                         chrome.notifications.create(
-                            "ufo_vps_notification",
+                            'ufo_vps_notification',
                             {
-                                type: "basic",
-                                iconUrl: "logo_48.png",
-                                title: "Not found:",
-                                message: "There is no ufo vps on this page: " + tab.url
-                            }, 
+                                type: 'basic',
+                                iconUrl: 'logo_48.png',
+                                title: 'Not found:',
+                                message: 'There is no ufo vps on this page: ' + tab.url
+                            },
                             chrome.notifications.clear
                         );
                     }else{
@@ -50,7 +77,7 @@ window.onload = function () {
             }
         })
     }
-}
+});
 
 function addCloseIcon() {
     document.getElementById('menu').innerHTML = '<div id="menu-close"><i class="fas fa-times-circle"></i></div>';
@@ -81,10 +108,11 @@ function traverseBookmarkNode(bookmarkNode) {
         title: bookmarkNode.title || 'None',
         url: bookmarkNode.url|| 'None'
     };
+    console.log(bookmark)
     if (!isUrl) {
         depth ++;
     }
-    isUrl = (bookmark.url != 'None');
+    isUrl = (bookmark.url !== 'None');
     bookmark.depth = depth;
     bookmarks += bookmark2md(bookmark);
     if (bookmarkNode.children == null) {
@@ -98,11 +126,11 @@ function traverseBookmarkNode(bookmarkNode) {
 
 function bookmark2md(bookmark) {
     let s = '';
-    if (bookmark.id != 0) {
+    if (bookmark.id.toString() !== '0') {
         for (let i = 0; i < (bookmark.depth - 2); i++) {
             s += '  ';
         }
-        if (bookmark.url == 'None') {
+        if (bookmark.url === 'None') {
             s += '- ' + bookmark.title + '\n';
         } else {
             s += '- [';
