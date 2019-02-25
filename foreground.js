@@ -1,15 +1,15 @@
-﻿chrome.extension.sendRequest({command: 'register'}, console.log)
+﻿chrome.runtime.sendMessage({command: 'register'}, console.log);
 
-chrome.extension.onMessage.addListener(
+chrome.runtime.onMessage.addListener(
     function(data, sender, sendResponse) {
-        console.log(data);
+        console.log(data, 'from', sender);
         switch (data.command) {
             case 'ufo':
                 let rule = /\d+\.\d+\.\d+\.\d+/;
                 let ip = '';
                 document.querySelectorAll('td').forEach(function (o, i) {
                     if (rule.test(o.innerHTML)) {
-                        console.log(i, o.innerHTML)
+                        console.log(i, o.innerHTML);
                         ip += o.innerHTML.match(rule)[0];
                         ip += '\n';
                     }
@@ -17,7 +17,7 @@ chrome.extension.onMessage.addListener(
                 sendResponse(ip);
                 break;
             default:
-                sendResponse('unknown command');
+                sendResponse('unsupported command');
         }
     }
 );

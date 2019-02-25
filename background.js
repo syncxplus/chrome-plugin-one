@@ -1,6 +1,6 @@
 let foreground = {};
 
-chrome.extension.onRequest.addListener(
+chrome.runtime.onMessage.addListener(
     function(message, sender, sendResponse) {
         switch(message.command) {
             case 'register':
@@ -11,7 +11,7 @@ chrome.extension.onRequest.addListener(
                 sendResponse({message: 'nothing to do with ' + JSON.stringify(message)});
         }
     }
-)
+);
 
 function notifyForeground(message) {
     if (foreground.tab && foreground.tab.id){
