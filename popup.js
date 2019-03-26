@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function addCloseIcon() {
-    document.getElementById('menu').innerHTML = '<div id="menu-close"><i class="fas fa-times-circle"></i></div>';
+    document.getElementById('menu').innerHTML = '<div id="menu-close"><i class="fa fa-times-circle"></i></div>';
     document.getElementById('menu-close').onclick = function() {
         location.reload();
     };
