@@ -14,10 +14,10 @@ chrome.runtime.onMessage.addListener(
                         ip += '\n';
                     }
                 });
-                sendResponse(ip);
+                sendResponse({data: ip});
                 break;
             default:
-                sendResponse('unsupported command');
+                sendResponse({data: 'unsupported command'});
         }
     }
 );

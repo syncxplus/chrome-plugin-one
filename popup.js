@@ -30,6 +30,13 @@ document.addEventListener('DOMContentLoaded', function () {
             page_title: 'Bookmarks',
             page_content: bookmarks
         };
+        let note = {
+            title: 'One Note',
+            start: 'Upload bookmarks beginning',
+            success: 'Upload bookmarks success',
+            error: 'Upload bookmarks error'
+        };
+        basicNotification(note.title, note.start);
         fetch(data.api, {
             method: 'POST',
             headers: {
@@ -40,13 +47,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 .join('&'),
         })
             .then(function () {
-                alert('Upload bookmarks done');
+                basicNotification(note.title, note.success);
             })
             .catch(function () {
                 for (let i = 0; i < arguments.length; i++) {
                     console.log(arguments[i]);
                 }
-                alert('Upload bookmarks error');
+                alert(note.error);
             });
         //let file = new File([bookmarks], 'bookmarks.md', {type: 'text/markdown;charset=utf-8'});
         //saveAs(file);
@@ -54,26 +61,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('menu-ufo').onclick = function() {
         chrome.tabs.sendMessage(tab.id, {command: 'ufo'}, function (response) {
-            if (response && response.length) {
-                let file = new File([response], 'ip.md', {type: 'text/markdown;charset=utf-8'});
+            if (response && response.data) {
+                let file = new File([response.data], 'ip.md', {type: 'text/markdown;charset=utf-8'});
                 saveAs(file);
             } else {
-                chrome.notifications.getPermissionLevel(function(level){
-                    if(level == 'granted'){
-                        chrome.notifications.create(
-                            'ufo_vps_notification',
-                            {
-                                type: 'basic',
-                                iconUrl: 'logo_48.png',
-                                title: 'Not found:',
-                                message: 'There is no ufo vps on this page: ' + tab.url
-                            },
-                            chrome.notifications.clear
-                        );
-                    }else{
-                        alert('no ufo vps')
-                    }
-                });
+                basicNotification('UFO VPS Not Found', tab.url);
             }
         })
     }
@@ -141,4 +133,21 @@ function bookmark2md(bookmark) {
         }
     }
     return s;    
+}
+
+function basicNotification(title, message) {
+    chrome.notifications.getPermissionLevel(function(level){
+        if(level === 'granted'){
+            chrome.notifications.create({
+                    type: 'basic',
+                    iconUrl: 'logo_48.png',
+                    title: title,
+                    message: message
+                },
+                chrome.notifications.clear
+            );
+        }else{
+            alert(message)
+        }
+    });
 }
