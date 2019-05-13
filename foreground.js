@@ -21,3 +21,16 @@ chrome.runtime.onMessage.addListener(
         }
     }
 );
+
+window.onload = function() {
+    setTimeout(
+        function () {
+            let toolbar = document.querySelector("ng-include[src='vm.toolbar'] > div");
+            if (toolbar) {
+                let html = '<button class="btn btn-sm btn-success" onclick="window.open(\'https://baidu.com\')">baidu</buttion>';
+                toolbar.insertAdjacentHTML('beforeEnd', html);
+            }
+        },
+        3000
+    );
+};
