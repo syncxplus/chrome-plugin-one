@@ -24,38 +24,40 @@
             justify-content: flex-start;
             align-items: center;
         }
-        div#menu-close {
-            justify-content: flex-end;
+        #menu div.name {
+            cursor: auto;
+            background: none;
+            color: darkgray;
         }
         i {
             width: 25px;
             font-size: 0.8rem;
         }
-        #menu-bookmark i {
-            color: green;
+        div#qrcode-img {
+            margin: 10px;
         }
-        #menu-qrcode i {
-            color: black;
+        div#qrcode-close {
+            justify-content: flex-end;
         }
-        #menu-close i {
+        #qrcode-close i {
             color: red;
             width: auto;
-        }
-        div#qrcode {
-            margin: 10px;
         }
     </style>
 </head>
 <body>
 <div id="menu">
-    <div id="menu-qrcode">
+    <div id="qrcode">
         <i class="fa fa-qrcode"></i><span>二维码</span>
     </div>
-    <div id="menu-bookmark">
+    <div id="bookmark">
         <i class="fa fa-bookmark"></i><span>备份书签</span>
     </div>
-    <div id="menu-ufo">
-        <i class="fa fa-rocket"></i><span>UFO VPS</span>
+    <div id="shopify" class="name">
+        <i></i><span>Shopify</span>
+    </div>
+    <div id="shopify-order-list">
+        <i></i><i class="fa fa-shopping-cart"></i><span>Order List</span>
     </div>
 </div>
 </body>

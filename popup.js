@@ -7,12 +7,12 @@ chrome.tabs.getSelected(null, function (selected) {
 document.addEventListener('DOMContentLoaded', function () {
     getBookmarks();
 
-    document.getElementById('menu-qrcode').onclick = function() {
-        let img = document.getElementById('qrcode');
+    document.getElementById('qrcode').onclick = function () {
+        let img = document.getElementById('qrcode-img');
         if (img == null) {
             addCloseIcon();
             img = document.createElement('div');
-            img.setAttribute('id', 'qrcode');
+            img.setAttribute('id', 'qrcode-img');
             document.getElementById('menu').insertAdjacentElement('afterend', img);
             let qrcode = new QRCode(img, {
                 width: 200,
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 
-    document.getElementById('menu-bookmark').onclick = function() {
+    document.getElementById('bookmark').onclick = function () {
         let data = {
             api: '',
             api_key: '',
@@ -59,21 +59,21 @@ document.addEventListener('DOMContentLoaded', function () {
         //saveAs(file);
     };
 
-    document.getElementById('menu-ufo').onclick = function() {
-        chrome.tabs.sendMessage(tab.id, {command: 'ufo'}, function (response) {
+    document.getElementById('shopify-order-list').onclick = function () {
+        chrome.tabs.sendMessage(tab.id, {command: 'shopify-order-list'}, function (response) {
             if (response && response.data) {
-                let file = new File([response.data], 'ip.md', {type: 'text/markdown;charset=utf-8'});
+                let file = new File([response.data], 'shopify.md', {type: 'text/markdown;charset=utf-8'});
                 saveAs(file);
             } else {
-                basicNotification('UFO VPS Not Found', tab.url);
+                basicNotification('Shopify Order List Not Found', tab.url);
             }
         })
     }
 });
 
 function addCloseIcon() {
-    document.getElementById('menu').innerHTML = '<div id="menu-close"><i class="fa fa-times-circle"></i></div>';
-    document.getElementById('menu-close').onclick = function() {
+    document.getElementById('menu').innerHTML = '<div id="qrcode-close"><i class="fa fa-times-circle"></i></div>';
+    document.getElementById('qrcode-close').onclick = function () {
         location.reload();
     };
 }
@@ -82,8 +82,8 @@ function getBookmarks() {
     bookmarks = '';
     isUrl = false;
     depth = 0;
-    chrome.bookmarks.getTree(function(tree) {
-        for(let i = 0; i < tree.length; i++){
+    chrome.bookmarks.getTree(function (tree) {
+        for (let i = 0; i < tree.length; i++) {
             traverseBookmarkNode(tree[i]);
         }
     });
@@ -98,11 +98,11 @@ function traverseBookmarkNode(bookmarkNode) {
         parentId: bookmarkNode.parentId || 0,
         index: bookmarkNode.index || 0,
         title: bookmarkNode.title || 'None',
-        url: bookmarkNode.url|| 'None'
+        url: bookmarkNode.url || 'None'
     };
     console.log(bookmark)
     if (!isUrl) {
-        depth ++;
+        depth++;
     }
     isUrl = (bookmark.url !== 'None');
     bookmark.depth = depth;
@@ -110,10 +110,10 @@ function traverseBookmarkNode(bookmarkNode) {
     if (bookmarkNode.children == null) {
         return;
     }
-    for(let i = 0; i < bookmarkNode.children.length; i++) {
+    for (let i = 0; i < bookmarkNode.children.length; i++) {
         traverseBookmarkNode(bookmarkNode.children[i]);
     }
-    depth --;
+    depth--;
 }
 
 function bookmark2md(bookmark) {
@@ -129,15 +129,15 @@ function bookmark2md(bookmark) {
             s += bookmark.title;
             s += '](';
             s += bookmark.url;
-            s += ')\n';    
+            s += ')\n';
         }
     }
-    return s;    
+    return s;
 }
 
 function basicNotification(title, message) {
-    chrome.notifications.getPermissionLevel(function(level){
-        if(level === 'granted'){
+    chrome.notifications.getPermissionLevel(function (level) {
+        if (level === 'granted') {
             chrome.notifications.create({
                     type: 'basic',
                     iconUrl: 'logo_48.png',
@@ -146,7 +146,7 @@ function basicNotification(title, message) {
                 },
                 chrome.notifications.clear
             );
-        }else{
+        } else {
             alert(message)
         }
     });

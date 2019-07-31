@@ -4,17 +4,14 @@ chrome.runtime.onMessage.addListener(
     function(data, sender, sendResponse) {
         console.log(data, 'from', sender);
         switch (data.command) {
-            case 'ufo':
-                let rule = /\d+\.\d+\.\d+\.\d+/;
-                let ip = '';
-                document.querySelectorAll('td').forEach(function (o, i) {
-                    if (rule.test(o.innerHTML)) {
-                        console.log(i, o.innerHTML);
-                        ip += o.innerHTML.match(rule)[0];
-                        ip += '\n';
-                    }
+            case 'shopify-order-list':
+                let data = '';
+                document.querySelectorAll('li._1D_TZ').forEach(function (o, i) {
+                    console.log(i, o.innerText);
+                    data += o.innerText.split('\n');
+                    data += '\n';
                 });
-                sendResponse({data: ip});
+                sendResponse({data: data});
                 break;
             default:
                 sendResponse({data: 'unsupported command'});
