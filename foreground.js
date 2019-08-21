@@ -13,8 +13,32 @@ chrome.runtime.onMessage.addListener(
                 });
                 sendResponse({data: data});
                 break;
+            case 'shopify-flash-metrics':
+                let metrics = {};
+                let frame = window.frames["galaxy"].document;
+                let names = frame.querySelectorAll(".ID-item");
+                let values = frame.querySelectorAll(".ID-metric-data-1");
+                for (let i = 0; i < names.length; i++) {
+                    let name = names[i].innerText.split("/").pop().split("?").shift();
+                    let metric = Number(values[i].innerText.split("(").shift());
+                    if (metrics[name]) {
+                        metrics[name] += metric;
+                    } else {
+                        metrics[name] = metric;
+                    }
+                }
+                console.log(metrics);
+                let text = 'name,metrics\n';
+                for (let name in metrics) {
+                    text += name;
+                    text += ',';
+                    text += metrics[name];
+                    text += '\n';
+                }
+                sendResponse({data: text});
+                break;
             default:
-                sendResponse({data: 'unsupported command'});
+                sendResponse({data: 'unsupported command: ' + data.command});
         }
     }
 );

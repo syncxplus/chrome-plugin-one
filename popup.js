@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('bookmark').onclick = function () {
         let data = {
-            api: '',
+            api: '/server/index.php?s=/api/item/updateByApi',
             api_key: '',
             api_token: '',
             page_title: 'Bookmarks',
@@ -66,6 +66,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 saveAs(file);
             } else {
                 basicNotification('Shopify Order List Not Found', tab.url);
+            }
+        })
+    };
+
+    document.getElementById('shopify-flash-metrics').onclick = function () {
+        chrome.tabs.sendMessage(tab.id, {command: 'shopify-flash-metrics'}, function (response) {
+            if (response && response.data) {
+                let file = new File([response.data], 'metrics.txt', {type: 'text/plain;charset=utf-8'});
+                saveAs(file);
+            } else {
+                basicNotification('Shopify Flash Metrics Not Found', tab.url);
             }
         })
     }
