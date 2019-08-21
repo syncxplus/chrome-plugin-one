@@ -5,13 +5,13 @@ chrome.runtime.onMessage.addListener(
         console.log(data, 'from', sender);
         switch (data.command) {
             case 'shopify-order-list':
-                let data = '';
+                let orders = '';
                 document.querySelectorAll('li._1D_TZ').forEach(function (o, i) {
                     console.log(i, o.innerText);
-                    data += o.innerText.split('\n');
-                    data += '\n';
+                    orders += o.innerText.split('\n');
+                    orders += '\n';
                 });
-                sendResponse({data: data});
+                sendResponse({data: orders});
                 break;
             case 'shopify-flash-metrics':
                 let metrics = {};
