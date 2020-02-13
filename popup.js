@@ -59,6 +59,11 @@ document.addEventListener('DOMContentLoaded', function () {
         //saveAs(file);
     };
 
+    document.getElementById('save').onclick = function () {
+        let file = new File([bookmarks], 'bookmarks.md', {type: 'text/markdown;charset=utf-8'});
+        saveAs(file);
+    };
+
     document.getElementById('shopify-order-list').onclick = function () {
         chrome.tabs.sendMessage(tab.id, {command: 'shopify-order-list'}, function (response) {
             if (response && response.data) {
