@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
             page_content: bookmarks
         };
         let note = {
-            title: 'One Note',
+            title: 'Sync BookMarks',
             start: 'Upload bookmarks beginning',
             success: 'Upload bookmarks success',
             error: 'Upload bookmarks error'
@@ -155,13 +155,11 @@ function basicNotification(title, message) {
     chrome.notifications.getPermissionLevel(function (level) {
         if (level === 'granted') {
             chrome.notifications.create({
-                    type: 'basic',
-                    iconUrl: 'logo_48.png',
-                    title: title,
-                    message: message
-                },
-                chrome.notifications.clear
-            );
+                type: 'basic',
+                iconUrl: 'jibo.png',
+                title: title,
+                message: message
+            });
         } else {
             alert(message)
         }
